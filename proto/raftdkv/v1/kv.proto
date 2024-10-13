@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package raftdkv.v1;
+
+option go_package = "github.com/amjadjibon/raftdkv/proto/gen/raftdkv/v1:raftdkv.v1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+service KVService {
+    rpc Set(SetRequest) returns (SetResponse) {
+        option (google.api.http) = {
+            post: "/v1/kv"
+            body: "*"
+        };
+    }
+    rpc Get(GetRequest) returns (GetResponse) {
+        option (google.api.http) = {
+            get: "/v1/kv/{key}"
+        };
+    }
+    rpc Delete(DeleteRequest) returns (DeleteResponse) {
+        option (google.api.http) = {
+            delete: "/v1/kv/{key}"
+        };
+    }
+}
+
+message SetRequest {
+    string key = 1;
+    bytes value = 2;
+}
+
+message SetResponse {
+    google.protobuf.Empty empty = 1;
+}
+
+message GetRequest {
+    string key = 1;
+}
+
+message GetResponse {
+    bytes value = 1;
+}
+
+message DeleteRequest {
+    string key = 1;
+}
+
+message DeleteResponse {
+    google.protobuf.Empty empty = 1;
+}

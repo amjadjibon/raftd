@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package raftdkv.v1;
+
+option go_package = "github.com/amjadjibon/raftdkv/proto/gen/raftdkv/v1:raftdkv.v1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+service RaftService {
+  rpc Join(JoinRequest) returns (JoinResponse) {
+    option (google.api.http) = {
+      post: "/v1/raft/join"
+      body: "*"
+    };
+  }
+
+  rpc Leave(LeaveRequest) returns (LeaveResponse) {
+    option (google.api.http) = {
+      post: "/v1/raft/leave"
+      body: "*"
+    };
+  }
+
+  rpc Status(google.protobuf.Empty) returns (StatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/raft/status"
+    };
+  }
+}
+
+message JoinRequest {
+  string id = 1;
+  string address = 2;
+}
+
+message JoinResponse {
+  google.protobuf.Empty empty = 1;
+}
+
+message LeaveRequest {
+  string id = 1;
+}
+
+message LeaveResponse {
+  google.protobuf.Empty empty = 1;
+}
+
+message StatusResponse {
+  repeated Peer peers = 1;
+  string leader = 2;
+}
+
+message Peer {
+  string id = 1;
+  string address = 2;
+}
