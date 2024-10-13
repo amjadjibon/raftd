@@ -1,10 +1,9 @@
-module github.com/amjadjibon/raftdkv
+module github.com/amjadjibon/raftd
 
 go 1.23
 
 require (
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
-	google.golang.org/genproto/googleapis/api v0.0.0-20241007155032-5fefd90f89a9
+	connectrpc.com/connect v1.17.0
 	google.golang.org/grpc v1.67.1
 	google.golang.org/protobuf v1.35.1
 )

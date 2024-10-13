@@ -1,0 +1,25 @@
+version: v2
+
+managed:
+  enabled: true
+
+  override:
+    - file_option: go_package_prefix
+      value: github.com/amjadjibon/raftd/gen
+
+  disable:
+    - module: buf.build/googleapis/googleapis
+      file_option: go_package_prefix
+
+plugins:
+  - remote: buf.build/protocolbuffers/go:v1.34.2
+    out: gen
+    opt: paths=source_relative
+
+  - remote: buf.build/grpc/go:v1.5.1
+    out: gen
+    opt: paths=source_relative,require_unimplemented_servers=false
+
+  - remote: buf.build/connectrpc/go:v1.17.0
+    out: gen
+    opt: paths=source_relative

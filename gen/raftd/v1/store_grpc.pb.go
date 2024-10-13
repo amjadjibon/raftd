@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: raftdkv/v1/kv.proto
+// source: raftd/v1/store.proto
 
-package v1_raftdkv_v1
+package raftdv1
 
 import (
 	context "context"
@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	KVService_Set_FullMethodName    = "/raftdkv.v1.KVService/Set"
-	KVService_Get_FullMethodName    = "/raftdkv.v1.KVService/Get"
-	KVService_Delete_FullMethodName = "/raftdkv.v1.KVService/Delete"
+	KVService_Set_FullMethodName    = "/raftd.v1.KVService/Set"
+	KVService_Get_FullMethodName    = "/raftd.v1.KVService/Get"
+	KVService_Delete_FullMethodName = "/raftd.v1.KVService/Delete"
 )
 
 // KVServiceClient is the client API for KVService service.
@@ -72,16 +72,15 @@ func (c *kVServiceClient) Delete(ctx context.Context, in *DeleteRequest, opts ..
 }
 
 // KVServiceServer is the server API for KVService service.
-// All implementations must embed UnimplementedKVServiceServer
+// All implementations should embed UnimplementedKVServiceServer
 // for forward compatibility.
 type KVServiceServer interface {
 	Set(context.Context, *SetRequest) (*SetResponse, error)
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
-	mustEmbedUnimplementedKVServiceServer()
 }
 
-// UnimplementedKVServiceServer must be embedded to have
+// UnimplementedKVServiceServer should be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
@@ -97,8 +96,7 @@ func (UnimplementedKVServiceServer) Get(context.Context, *GetRequest) (*GetRespo
 func (UnimplementedKVServiceServer) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
-func (UnimplementedKVServiceServer) mustEmbedUnimplementedKVServiceServer() {}
-func (UnimplementedKVServiceServer) testEmbeddedByValue()                   {}
+func (UnimplementedKVServiceServer) testEmbeddedByValue() {}
 
 // UnsafeKVServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to KVServiceServer will
@@ -176,7 +174,7 @@ func _KVService_Delete_Handler(srv interface{}, ctx context.Context, dec func(in
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var KVService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "raftdkv.v1.KVService",
+	ServiceName: "raftd.v1.KVService",
 	HandlerType: (*KVServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -193,5 +191,5 @@ var KVService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "raftdkv/v1/kv.proto",
+	Metadata: "raftd/v1/store.proto",
 }

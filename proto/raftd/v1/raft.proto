@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package raftd.v1;
+
+service RaftService {
+  rpc Join(JoinRequest) returns (JoinResponse) {}
+  rpc Leave(LeaveRequest) returns (LeaveResponse) {}
+  rpc Status(StatusRequest) returns (StatusResponse) {}
+}
+
+message JoinRequest {
+  string id = 1;
+  string address = 2;
+}
+
+message JoinResponse {}
+
+message LeaveRequest {
+  string id = 1;
+}
+
+message LeaveResponse {}
+
+message StatusRequest {}
+
+message StatusResponse {
+  repeated Peer peers = 1;
+  string leader = 2;
+}
+
+message Peer {
+  string id = 1;
+  string address = 2;
+}

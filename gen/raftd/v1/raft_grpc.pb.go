@@ -2,16 +2,15 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: raftdkv/v1/raft.proto
+// source: raftd/v1/raft.proto
 
-package v1_raftdkv_v1
+package raftdv1
 
 import (
 	context "context"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	RaftService_Join_FullMethodName   = "/raftdkv.v1.RaftService/Join"
-	RaftService_Leave_FullMethodName  = "/raftdkv.v1.RaftService/Leave"
-	RaftService_Status_FullMethodName = "/raftdkv.v1.RaftService/Status"
+	RaftService_Join_FullMethodName   = "/raftd.v1.RaftService/Join"
+	RaftService_Leave_FullMethodName  = "/raftd.v1.RaftService/Leave"
+	RaftService_Status_FullMethodName = "/raftd.v1.RaftService/Status"
 )
 
 // RaftServiceClient is the client API for RaftService service.
@@ -31,7 +30,7 @@ const (
 type RaftServiceClient interface {
 	Join(ctx context.Context, in *JoinRequest, opts ...grpc.CallOption) (*JoinResponse, error)
 	Leave(ctx context.Context, in *LeaveRequest, opts ...grpc.CallOption) (*LeaveResponse, error)
-	Status(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*StatusResponse, error)
+	Status(ctx context.Context, in *StatusRequest, opts ...grpc.CallOption) (*StatusResponse, error)
 }
 
 type raftServiceClient struct {
@@ -62,7 +61,7 @@ func (c *raftServiceClient) Leave(ctx context.Context, in *LeaveRequest, opts ..
 	return out, nil
 }
 
-func (c *raftServiceClient) Status(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*StatusResponse, error) {
+func (c *raftServiceClient) Status(ctx context.Context, in *StatusRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(StatusResponse)
 	err := c.cc.Invoke(ctx, RaftService_Status_FullMethodName, in, out, cOpts...)
@@ -73,16 +72,15 @@ func (c *raftServiceClient) Status(ctx context.Context, in *emptypb.Empty, opts 
 }
 
 // RaftServiceServer is the server API for RaftService service.
-// All implementations must embed UnimplementedRaftServiceServer
+// All implementations should embed UnimplementedRaftServiceServer
 // for forward compatibility.
 type RaftServiceServer interface {
 	Join(context.Context, *JoinRequest) (*JoinResponse, error)
 	Leave(context.Context, *LeaveRequest) (*LeaveResponse, error)
-	Status(context.Context, *emptypb.Empty) (*StatusResponse, error)
-	mustEmbedUnimplementedRaftServiceServer()
+	Status(context.Context, *StatusRequest) (*StatusResponse, error)
 }
 
-// UnimplementedRaftServiceServer must be embedded to have
+// UnimplementedRaftServiceServer should be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
@@ -95,11 +93,10 @@ func (UnimplementedRaftServiceServer) Join(context.Context, *JoinRequest) (*Join
 func (UnimplementedRaftServiceServer) Leave(context.Context, *LeaveRequest) (*LeaveResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Leave not implemented")
 }
-func (UnimplementedRaftServiceServer) Status(context.Context, *emptypb.Empty) (*StatusResponse, error) {
+func (UnimplementedRaftServiceServer) Status(context.Context, *StatusRequest) (*StatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Status not implemented")
 }
-func (UnimplementedRaftServiceServer) mustEmbedUnimplementedRaftServiceServer() {}
-func (UnimplementedRaftServiceServer) testEmbeddedByValue()                     {}
+func (UnimplementedRaftServiceServer) testEmbeddedByValue() {}
 
 // UnsafeRaftServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to RaftServiceServer will
@@ -156,7 +153,7 @@ func _RaftService_Leave_Handler(srv interface{}, ctx context.Context, dec func(i
 }
 
 func _RaftService_Status_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(StatusRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -168,7 +165,7 @@ func _RaftService_Status_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: RaftService_Status_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RaftServiceServer).Status(ctx, req.(*emptypb.Empty))
+		return srv.(RaftServiceServer).Status(ctx, req.(*StatusRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -177,7 +174,7 @@ func _RaftService_Status_Handler(srv interface{}, ctx context.Context, dec func(
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var RaftService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "raftdkv.v1.RaftService",
+	ServiceName: "raftd.v1.RaftService",
 	HandlerType: (*RaftServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -194,5 +191,5 @@ var RaftService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "raftdkv/v1/raft.proto",
+	Metadata: "raftd/v1/raft.proto",
 }
