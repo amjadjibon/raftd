@@ -1,0 +1,210 @@
+swagger: "2.0"
+info:
+  title: raftdkv/v1/kv.proto
+  version: version not set
+tags:
+  - name: KVService
+  - name: RaftService
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /v1/kv:
+    post:
+      operationId: KVService_Set
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1SetResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1SetRequest'
+      tags:
+        - KVService
+  /v1/kv/{key}:
+    get:
+      operationId: KVService_Get
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1GetResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+      parameters:
+        - name: key
+          in: path
+          required: true
+          type: string
+      tags:
+        - KVService
+    delete:
+      operationId: KVService_Delete
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1DeleteResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+      parameters:
+        - name: key
+          in: path
+          required: true
+          type: string
+      tags:
+        - KVService
+  /v1/raft/join:
+    post:
+      operationId: RaftService_Join
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1JoinResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1JoinRequest'
+      tags:
+        - RaftService
+  /v1/raft/leave:
+    post:
+      operationId: RaftService_Leave
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1LeaveResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1LeaveRequest'
+      tags:
+        - RaftService
+  /v1/raft/status:
+    get:
+      operationId: RaftService_Status
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1StatusResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/googlerpcStatus'
+      tags:
+        - RaftService
+definitions:
+  googlerpcStatus:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      details:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/protobufAny'
+  protobufAny:
+    type: object
+    properties:
+      '@type':
+        type: string
+    additionalProperties: {}
+  v1DeleteResponse:
+    type: object
+    properties:
+      empty:
+        type: object
+        properties: {}
+  v1GetResponse:
+    type: object
+    properties:
+      value:
+        type: string
+        format: byte
+  v1JoinRequest:
+    type: object
+    properties:
+      id:
+        type: string
+      address:
+        type: string
+  v1JoinResponse:
+    type: object
+    properties:
+      empty:
+        type: object
+        properties: {}
+  v1LeaveRequest:
+    type: object
+    properties:
+      id:
+        type: string
+  v1LeaveResponse:
+    type: object
+    properties:
+      empty:
+        type: object
+        properties: {}
+  v1Peer:
+    type: object
+    properties:
+      id:
+        type: string
+      address:
+        type: string
+  v1SetRequest:
+    type: object
+    properties:
+      key:
+        type: string
+      value:
+        type: string
+        format: byte
+  v1SetResponse:
+    type: object
+    properties:
+      empty:
+        type: object
+        properties: {}
+  v1StatusResponse:
+    type: object
+    properties:
+      peers:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1Peer'
+      leader:
+        type: string
