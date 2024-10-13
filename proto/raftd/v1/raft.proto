@@ -32,3 +32,9 @@ message Peer {
   string id = 1;
   string address = 2;
 }
+
+message Command {
+  string op = 1;
+  string key = 2;
+  bytes value = 3;
+}
