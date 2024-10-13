@@ -71,7 +71,8 @@ func NewRaftd(
 		return nil, err
 	}
 
-	fsm := NewFSM(store.New())
+	memStore := store.New()
+	fsm := NewFSM(memStore)
 
 	raftEngine, err := raft.NewRaft(
 		config,
@@ -97,7 +98,7 @@ func NewRaftd(
 	raftEngine.BootstrapCluster(configuration)
 
 	return &Raftd{
-		store:      store.New(),
+		store:      memStore,
 		fsm:        fsm,
 		raftEngine: raftEngine,
 		raftBoltDB: boltStore,
@@ -164,8 +165,9 @@ func (s *Raftd) Set(ctx context.Context, req *raftdv1.SetRequest) (*raftdv1.SetR
 		return nil, status.Errorf(codes.Internal, "failed to marshal command: %v", err)
 	}
 
-	if err := s.raftEngine.Apply(data, time.Second); err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to apply command: %v", err)
+	resp := s.raftEngine.Apply(data, time.Second)
+	if resp.Error() != nil {
+		return nil, status.Errorf(codes.Internal, "failed to apply command: %v", resp.Error())
 	}
 
 	return &raftdv1.SetResponse{}, nil
@@ -177,6 +179,7 @@ func (s *Raftd) Get(ctx context.Context, req *raftdv1.GetRequest) (*raftdv1.GetR
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "key not found: %v", err)
 	}
+
 	return &raftdv1.GetResponse{Value: value}, nil
 }
 

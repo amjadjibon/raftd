@@ -28,13 +28,14 @@ func (f *FSM) Apply(raftLog *raft.Log) interface{} {
 		if err := json.Unmarshal(raftLog.Data, &c); err != nil {
 			return err
 		}
-
 		switch c.Op {
 		case "set":
 			return f.store.Set(c.Key, c.Value)
 		case "del":
 			return f.store.Delete(c.Key)
 		}
+	default:
+		return nil
 	}
 	return nil
 }
